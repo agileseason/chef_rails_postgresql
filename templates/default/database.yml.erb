@@ -1,0 +1,10 @@
+<%= @app_env %>:
+  adapter: postgresql
+  encoding: utf8
+  database: <%= @database %>
+  username: <%= @username %>
+  password: <%= @password %>
+  host: localhost
+  pool: 1000
+  timeout: 5000
+  reaping_frequency: 60
