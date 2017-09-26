@@ -20,12 +20,7 @@ node.override['postgresql']['hba_file'] = "/etc/postgresql/#{node['postgresql'][
 node.override['postgresql']['ident_file'] = "/etc/postgresql/#{node['postgresql']['version']}/main/pg_ident.conf"
 node.override['postgresql']['external_pid_file'] = "/var/run/postgresql/#{node['postgresql']['version']}-main.pid"
 
-# for pg gem
-package 'libpq-dev'
-
-# allow chef-postgres to install postgres dependencies
-include_recipe 'postgresql'
-
+# set 'md5' login method to allow local database login with login&password
 node.override['postgresql']['pg_hba'] = [
   {
     'type' => 'local',
@@ -35,6 +30,12 @@ node.override['postgresql']['pg_hba'] = [
     'method' => 'md5'
   }
 ]
+
+# for pg gem
+package 'libpq-dev'
+
+# allow chef-postgres to install postgres dependencies
+include_recipe 'postgresql'
 
 postgresql_database node['chef_rails_postgresql']['database'] do
   owner node['chef_rails_postgresql']['database']
