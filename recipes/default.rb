@@ -37,19 +37,6 @@ package 'libpq-dev'
 # allow chef-postgres to install postgres dependencies
 include_recipe 'postgresql'
 
-postgresql_database node['chef_rails_postgresql']['database'] do
-  owner node['chef_rails_postgresql']['database']
-  encoding 'UTF-8'
-  template 'template0'
-  locale 'en_US.UTF-8'
-end
-
-node['chef_rails_postgresql']['extensions'].each do |extension|
-  postgresql_extension extension do
-    database node['chef_rails_postgresql']['database']
-  end
-end
-
 postgresql_user app.user do
   superuser true
   createdb true
@@ -63,4 +50,17 @@ postgresql_user node['chef_rails_postgresql']['username'] do
   login true
   replication false
   password node['chef_rails_postgresql']['password']
+end
+
+postgresql_database node['chef_rails_postgresql']['database'] do
+  owner node['chef_rails_postgresql']['database']
+  encoding 'UTF-8'
+  template 'template0'
+  locale 'en_US.UTF-8'
+end
+
+node['chef_rails_postgresql']['extensions'].each do |extension|
+  postgresql_extension extension do
+    database node['chef_rails_postgresql']['database']
+  end
 end
