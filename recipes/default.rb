@@ -36,6 +36,7 @@ package 'libpq-dev'
 
 # allow chef-postgres to install postgres dependencies
 include_recipe 'postgresql'
+include_recipe 'postgresql::server'
 
 postgresql_user app.user do
   superuser true
