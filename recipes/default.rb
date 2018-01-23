@@ -36,6 +36,8 @@ package 'libpq-dev'
 
 # allow chef-postgres to install postgres dependencies
 include_recipe 'postgresql'
+# must be called to make changes in pg_hba.conf
+include_recipe 'postgresql::server'
 
 postgresql_user app.user do
   superuser true
