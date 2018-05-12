@@ -6,30 +6,36 @@
 #
 # All rights reserved - Do Not Redistribute
 
-fail "database is not set" if node['chef_rails_postgresql']['database'].nil?
-fail "username is not set" if node['chef_rails_postgresql']['username'].nil?
-fail "password is not set" if node['chef_rails_postgresql']['password'].nil?
+raise 'database is not set' if node['chef_rails_postgresql']['database'].nil?
+raise 'username is not set' if node['chef_rails_postgresql']['username'].nil?
+raise 'password is not set' if node['chef_rails_postgresql']['password'].nil?
 
 app = AppHelpers.new node['app']
 
 # file locations must be overriden as well when changing default version (9.4)
 # see https://github.com/phlipper/chef-postgresql
-node.override['postgresql']['version'] = node['chef_rails_postgresql']['version']
-node.override['postgresql']['data_directory'] = "/var/lib/postgresql/#{node['postgresql']['version']}/main"
-node.override['postgresql']['hba_file'] = "/etc/postgresql/#{node['postgresql']['version']}/main/pg_hba.conf"
-node.override['postgresql']['ident_file'] = "/etc/postgresql/#{node['postgresql']['version']}/main/pg_ident.conf"
-node.override['postgresql']['external_pid_file'] = "/var/run/postgresql/#{node['postgresql']['version']}-main.pid"
+node.override['postgresql']['version'] =
+  node['chef_rails_postgresql']['version']
+node.override['postgresql']['data_directory'] =
+  "/var/lib/postgresql/#{node['postgresql']['version']}/main"
+node.override['postgresql']['hba_file'] =
+  "/etc/postgresql/#{node['postgresql']['version']}/main/pg_hba.conf"
+node.override['postgresql']['ident_file'] =
+  "/etc/postgresql/#{node['postgresql']['version']}/main/pg_ident.conf"
+node.override['postgresql']['external_pid_file'] =
+  "/var/run/postgresql/#{node['postgresql']['version']}-main.pid"
 
 # set 'md5' login method to allow local database login with login&password
-node.override['postgresql']['pg_hba'] = [
-  {
-    'type' => 'local',
-    'db' => node['chef_rails_postgresql']['username'],
-    'user' => node['chef_rails_postgresql']['password'],
-    'addr' => '',
-    'method' => 'md5'
-  }
-]
+node.override['postgresql']['pg_hba'] =
+  node['chef_rails_postgresql']['pg_hba'] || [
+    {
+      'type' => 'local',
+      'db' => node['chef_rails_postgresql']['username'],
+      'user' => node['chef_rails_postgresql']['password'],
+      'addr' => '',
+      'method' => 'md5'
+    }
+  ]
 
 # for pg gem
 package 'libpq-dev'
