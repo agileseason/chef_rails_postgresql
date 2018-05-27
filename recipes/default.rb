@@ -1,14 +1,6 @@
-#
-# Cookbook Name:: chef_rails_postgresql
-# Recipe:: default
-#
-# Copyright 2017, YOUR_COMPANY_NAME
-#
-# All rights reserved - Do Not Redistribute
-
-raise 'database is not set' if node['chef_rails_postgresql']['database'].nil?
-raise 'username is not set' if node['chef_rails_postgresql']['username'].nil?
-raise 'password is not set' if node['chef_rails_postgresql']['password'].nil?
+%w[database username password].each do |key|
+  raise "#{key} is not set" if node['chef_rails_postgresql'][key].nil?
+end
 
 app = AppHelpers.new node['app']
 
