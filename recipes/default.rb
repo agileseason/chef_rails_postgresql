@@ -17,6 +17,9 @@ node.override['postgresql']['ident_file'] =
 node.override['postgresql']['external_pid_file'] =
   "/var/run/postgresql/#{node['postgresql']['version']}-main.pid"
 
+node.override['postgresql']['listen_addresses'] =
+  node['chef_rails_postgresql']['listen_addresses']
+
 # set 'md5' login method to allow local database login with login&password
 node.override['postgresql']['pg_hba'] =
   node['chef_rails_postgresql']['pg_hba'] || [
