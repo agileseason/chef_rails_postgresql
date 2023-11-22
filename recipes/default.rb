@@ -26,7 +26,7 @@ node.override['postgresql']['pg_hba'] =
     {
       'type' => 'local',
       'db' => node['chef_rails_postgresql']['database'],
-      'user' => node['chef_rails_postgresql']['usename'],
+      'user' => node['chef_rails_postgresql']['username'],
       'addr' => '',
       'method' => 'md5'
     }
